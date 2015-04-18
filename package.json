@@ -1,0 +1,11 @@
+{
+  "name": "delphine-server",
+  "version": "1.0.0",
+  "dependencies": {
+    "express": "^4.12.3"
+  },
+  "devDependencies": {
+    "chai": "^2.2.0",
+    "mocha": "^2.2.4"
+  }
+}
