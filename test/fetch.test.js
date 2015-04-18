@@ -1,6 +1,7 @@
 var expect = require('chai').expect;
 var sinon = require('sinon');
 var request = require('request');
+
 var fetch = require('../lib/fetch');
 
 describe('fetch', function() {
