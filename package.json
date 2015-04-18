@@ -1,6 +1,9 @@
 {
   "name": "delphine-server",
   "version": "1.0.0",
+  "scripts": {
+    "test": "mocha --reporter spec --ui tdd -w"
+  },
   "dependencies": {
     "express": "^4.12.3"
   },
