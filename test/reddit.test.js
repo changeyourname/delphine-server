@@ -19,7 +19,8 @@ describe('reddit', function() {
                 is_self: false,
                 subreddit: 'subreddit',
                 thumbnail: 'http://awesome.thumbnail.com/',
-                title: 'title'
+                title: 'title',
+                url: 'http://awesome.url.com/'
               }
             },
             {
@@ -30,7 +31,8 @@ describe('reddit', function() {
                 is_self: true,
                 subreddit: 'subreddit',
                 thumbnail: 'http://awesome.thumbnail.com/',
-                title: 'title'
+                title: 'title',
+                url: 'http://awesome.url.com/'
               }
             }
           ]
@@ -68,6 +70,7 @@ describe('reddit', function() {
       expect(items[0].subreddit).to.equal('subreddit');
       expect(items[0].thumbnail).to.equal('http://awesome.thumbnail.com/');
       expect(items[0].title).to.equal('title');
+      expect(items[0].url).to.equal('http://awesome.url.com/');
       done();
     });
   });
