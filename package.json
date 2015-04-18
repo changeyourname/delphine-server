@@ -2,13 +2,16 @@
   "name": "delphine-server",
   "version": "1.0.0",
   "scripts": {
-    "test": "mocha --reporter spec --ui tdd -w"
+    "test": "mocha",
+    "test:watch": "onchange './lib/**/*.js' './test/**/*.test.js' -- mocha"
   },
   "dependencies": {
-    "express": "^4.12.3"
+    "express": "^4.12.3",
+    "request": "^2.55.0"
   },
   "devDependencies": {
     "chai": "^2.2.0",
-    "mocha": "^2.2.4"
+    "mocha": "^2.2.4",
+    "sinon": "^1.14.1"
   }
 }
