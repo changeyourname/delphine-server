@@ -4,25 +4,45 @@ var request = require('request');
 
 var fetch = require('../lib/fetch');
 
-describe('fetch', function() {
-  before(function(done) {
-    sinon
-      .stub(request, 'get')
-      .yields(null, null, JSON.stringify({ foo: 'bar' }));
-    done();
-  });
-
-  after(function(done) {
+describe.only('fetch', function() {
+  afterEach(function(done) {
     request.get.restore();
     done();
   });
 
-  it('should return fetched data from url', function(done) {
-    fetch('http://awesome.feed.io/', function(err, result) {
-      if (err) return done(err);
-      expect(request.get.called).to.be.true;
-      expect(result).to.not.empty;
+  describe('200 OK', function() {
+    before(function(done) {
+      sinon
+        .stub(request, 'get')
+        .yields(null, { statusCode: 200 }, JSON.stringify({ foo: 'bar' }));
       done();
+    });
+
+    it('should return fetched data from url', function(done) {
+      fetch('http://daan.vosdewael.com/', function(err, result) {
+        expect(request.get.called).to.be.true;
+        expect(err).to.be.null;
+        expect(result).to.not.empty;
+        done();
+      });
+    });
+  });
+
+  describe('404 Not Found', function() {
+    before(function(done) {
+      sinon
+        .stub(request, 'get')
+        .yields(null, { statusCode: 404 }, null);
+      done();
+    });
+
+    it('should return 404 when page not found', function(done) {
+      fetch('http://daan.vosdewael.com/404', function(err, result) {
+        expect(request.get.called).to.be.true;
+        expect(err).to.be.null;
+        expect(result).to.be.empty;
+        done();
+      });
     });
   });
 });
