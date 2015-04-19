@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "test": "mocha",
-    "test:watch": "onchange './lib/**/*.js' './test/**/*.test.js' -- mocha"
+    "test:watch": "onchange './lib/**/*.js' './test/**/*.test.js' -- mocha",
+    "coverage": "istanbul cover --report html node_modules/.bin/_mocha"
   },
   "dependencies": {
     "express": "^4.12.3",
