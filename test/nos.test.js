@@ -28,10 +28,10 @@ describe('nos', function() {
 
     it('should not return undefined values', function(done) {
       nos(function(err, items) {
-        expect(items[0]['date']).to.not.be.undefined;
-        expect(items[0]['image']).to.not.be.undefined;
-        expect(items[0]['title']).to.not.be.undefined;
-        expect(items[0]['url']).to.not.be.undefined;
+        expect(items[0].date).to.not.be.undefined;
+        expect(items[0].image).to.not.be.undefined;
+        expect(items[0].title).to.not.be.undefined;
+        expect(items[0].url).to.not.be.undefined;
         done();
       });
     });
