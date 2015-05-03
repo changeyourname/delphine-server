@@ -1,14 +1,11 @@
-require('dotenv').load();
 var expect = require('chai').expect;
 var nock = require('nock');
 var path = require('path');
-var url = require('url');
 
 var redis = require('redis');
 var client = redis.createClient();
 
 var reddit = require('../lib/reddit');
-var redditURL = url.parse(process.env.REDDIT_URL);
 
 describe('reddit', function() {
   afterEach(function(done) {
@@ -20,8 +17,8 @@ describe('reddit', function() {
   describe('200 OK', function() {
     beforeEach(function() {
       nock.cleanAll();
-      nock(redditURL.protocol + '//' + redditURL.host)
-        .get(redditURL.pathname + redditURL.search)
+      nock('https://www.reddit.com/.json')
+        .get('?feed=5a2dfc3a384a4a5278bded2fb6438923d708edc8&user=foxwell_750')
         .replyWithFile(200, path.join(__dirname, '/replies/reddit.json'));
     });
 
@@ -70,8 +67,8 @@ describe('reddit', function() {
   describe('404 Not Found', function() {
     beforeEach(function() {
       nock.cleanAll();
-      nock(redditURL.protocol + '//' + redditURL.host)
-        .get(redditURL.pathname + redditURL.search)
+      nock('https://www.reddit.com/.json')
+        .get('?feed=5a2dfc3a384a4a5278bded2fb6438923d708edc8&user=foxwell_750')
         .reply(404, null);
     });
 
