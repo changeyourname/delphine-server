@@ -2,11 +2,21 @@ var expect = require('chai').expect;
 var nock = require('nock');
 var path = require('path');
 
+var redis = require('redis');
+var client = redis.createClient();
+
 var reddit = require('../lib/reddit');
 
 describe('reddit', function() {
+  afterEach(function(done) {
+    client.flushdb(function() {
+      done();
+    });
+  });
+
   describe('200 OK', function() {
     beforeEach(function() {
+      nock.cleanAll();
       nock('https://www.reddit.com')
         .get('/.json?feed=some_random_id')
         .replyWithFile(200, path.join(__dirname, '/replies/reddit.json'));
@@ -37,14 +47,32 @@ describe('reddit', function() {
         done();
       });
     });
+
+    it('should return data from redis', function(done) {
+      client.set('reddit', JSON.stringify([{ id: '33tgeb', domain: 'i.imgur.com', subreddit: 'pics', thumbnail: 'http://a.thumbs.redditmedia.com/l25TyZXPMIThqIizldYvh4oYJyKCw0AEcQFrJBLCCS4.jpg', title: 'Oh. You\'re home early.', url: 'http://i.imgur.com/Lab4Ray.jpg' }]), function() {
+        reddit('https://www.reddit.com/.json?feed=some_random_id', function(err, items) {
+          expect(items[0]).to.have.all.keys(['id', 'domain', 'subreddit', 'thumbnail', 'title', 'url']);
+          expect(items[0].id).to.equal('33tgeb');
+          expect(items[0].domain).to.equal('i.imgur.com');
+          expect(items[0].subreddit).to.equal('pics');
+          expect(items[0].thumbnail).to.equal('http://a.thumbs.redditmedia.com/l25TyZXPMIThqIizldYvh4oYJyKCw0AEcQFrJBLCCS4.jpg');
+          expect(items[0].title).to.equal('Oh. You\'re home early.');
+          expect(items[0].url).to.equal('http://i.imgur.com/Lab4Ray.jpg');
+          done();
+        });
+      });
+    });
   });
 
   describe('404 Not Found', function() {
-    it('should return 404 when page not found', function(done) {
+    beforeEach(function() {
+      nock.cleanAll();
       nock('https://www.reddit.com')
         .get('/.json?feed=some_random_id')
         .reply(404, null);
+    });
 
+    it('should return 404 when page not found', function(done) {
       reddit('https://www.reddit.com/.json?feed=some_random_id', function(err, items) {
         expect(err).to.be.true;
         expect(items).to.be.empty;
